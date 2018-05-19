@@ -1,0 +1,5 @@
+*.zip
+*.pkl
+*.gz
+*.pyc
+.DS_Store
