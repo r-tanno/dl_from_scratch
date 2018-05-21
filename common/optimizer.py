@@ -153,4 +153,4 @@ class SDprop:
             # c(i,t) に代入しているのが μ(i,t-1)のため、cを更新したあとでmを更新する
             self.m[key] *= self.gamma
             self.m[key] += (1 - self.gamma) * grads[key] 
-            params[key] -= self.lr * grads[key] / (np.sqrt(self.c[key]) + 1e-7)
+            params[key] -= self.lr * grads[key] / (np.sqrt(self.c[key]) + 1e-7) 
