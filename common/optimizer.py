@@ -133,12 +133,14 @@ class SDprop:
     
     """SDProp (http://ntt..."""
     
-    def __init__(self, lr=0.001, gamma=0.99):
+    def __init__(self, lr=0.001, gamma=0.99, bias_correction=True):
         self.lr = lr
         self.gamma = gamma
-        # m : μ,  c : C**2
+        self.bs = bias_correction
+        # m : μ,  c : C**2, iter: timestep
         self.m = None
         self.c = None
+        self.iter = 0
     
     def update(self, params, grads):
         if self.m is None:
@@ -146,11 +148,18 @@ class SDprop:
             for key, val in params.items():
                 self.m[key] = np.zeros_like(val)
                 self.c[key] = np.zeros_like(val)
-            
+        
+        if self.bs is True:
+            self.iter += 1
+            lr_t = self.lr * np.sqrt(1.0 - self.gamma**self.iter)
+        
         for key in params.keys():
             self.c[key] *= self.gamma
             self.c[key] += self.gamma * (1 - self.gamma) * (grads[key] - self.m[key])**2
             # c(i,t) に代入しているのが μ(i,t-1)のため、cを更新したあとでmを更新する
             self.m[key] *= self.gamma
-            self.m[key] += (1 - self.gamma) * grads[key] 
-            params[key] -= self.lr * grads[key] / (np.sqrt(self.c[key]) + 1e-7) 
+            self.m[key] += (1 - self.gamma) * grads[key]
+            if self.bs is True:
+                params[key] -= lr_t * grads[key] / (np.sqrt(self.c[key]) + 1e-7)
+            else:
+                params[key] -= self.lr * grads[key] / (np.sqrt(self.c[key]) + 1e-7) 
