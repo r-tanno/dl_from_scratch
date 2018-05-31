@@ -131,7 +131,10 @@ class Adam:
 
 class SDprop:
     
-    """SDProp (http://ntt..."""
+    """SDProp
+    Adaptive Learning Rate via Covariance Matrix Based Preconditioning for Deep Neural Networks
+    (https://www.ijcai.org/proceedings/2017/0267.pdf)
+    """
     
     def __init__(self, lr=0.001, gamma=0.99):
         self.lr = lr
