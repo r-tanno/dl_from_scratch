@@ -10,9 +10,10 @@ class Trainer:
     def __init__(self, network, x_train, t_train, x_test, t_test,
                  epochs=20, mini_batch_size=100,
                  optimizer='SGD', optimizer_param={'lr':0.01}, 
-                 evaluate_sample_num_per_epoch=None, verbose=True):
+                 evaluate_sample_num_per_epoch=None, verbose=True, verbose2=False):
         self.network = network
         self.verbose = verbose
+        self.verbose2 = verbose2
         self.x_train = x_train
         self.t_train = t_train
         self.x_test = x_test
@@ -23,7 +24,7 @@ class Trainer:
 
         # optimzer
         optimizer_class_dict = {'sgd':SGD, 'momentum':Momentum, 'nesterov':Nesterov,
-                                'sdprop':SDprop,
+                                'sdprop':SDprop, 'adastand': Adastand,
                                 'adagrad':AdaGrad, 'rmsprop':RMSprop, 'adam':Adam}
         self.optimizer = optimizer_class_dict[optimizer.lower()](**optimizer_param)
         
@@ -47,7 +48,7 @@ class Trainer:
         
         loss = self.network.loss(x_batch, t_batch)
         self.train_loss_list.append(loss)
-        # if self.verbose: print("train loss:" + str(loss))
+        if self.verbose2: print("train loss:" + str(loss))
         
         if self.current_iter % self.iter_per_epoch == 0:
             self.current_epoch += 1

@@ -155,6 +155,7 @@ class SDprop:
         if self.bs is True:
             self.iter += 1
             lr_t = self.lr * np.sqrt(1.0 - self.gamma**self.iter)
+            #print(lr_t)
         
         for key in params.keys():
             self.c[key] *= self.gamma

@@ -6,11 +6,14 @@ import matplotlib.pyplot as plt
 from deep_convnet import DeepConvNet
 from dataset.mnist import load_mnist
 
+opt = sys.argv[1]
+if opt is None:
+    opt = 'Adam'
 
 (x_train, t_train), (x_test, t_test) = load_mnist(flatten=False)
 
 network = DeepConvNet()
-network.load_params("deep_convnet_params.pkl")
+network.load_params(opt + "_deep_convnet_params.pkl")
 
 print("calculating test accuracy ... ")
 #sampled = 1000
