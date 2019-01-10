@@ -168,28 +168,7 @@ class SDprop:
             else:
                 params[key] -= self.lr * grads[key] / (np.sqrt(self.c[key]) + 1e-8)
                 
-class Adastand:
-
-    """Adastand"""
-
-    def __init__(self, lr=0.001, beta1=0.7, beta2=0.99, epsilon=1e-7):
-        self.lr = lr
-        self.beta1 = beta1
-        self.beta2 = beta2
-        self.epsilon = epsilon
-        self.iter = 0
-        self.m = None
-        self.v = None
-        
-    def update(self, params, grads):
-        if self.m is None:
-            self.m, self.v = {}, {}
-            for key, val in params.items():
-                self.m[key] = np.zeros_like(val)
-                self.v[key] = np.zeros_like(val)
-        
-        self.iter += 1
-        lr_t  = self.lr * np.sqrt(1.0 - self.beta2**self.iter) / (1.0 - self.beta1**self.iter)         
+       
         
         for key in params.keys():
             # m, vのインクリメント処理はAdamと逆
